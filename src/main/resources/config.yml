@@ -1,0 +1,64 @@
+#Crawling by Arthed
+#Support Server: https://discord.gg/MPKVEcX
+
+
+############################################
+
+
+#Crawling Modes:
+#HOLD - players will continue crawling as long as they keep shift pressed
+#TOGGLE - players will start crawling and get up when they press shift
+#TUNNELS - players can enter one block tunnels by sneaking in front of them
+
+#You can use multiple options at the same time
+crawling_modes:
+  - 'HOLD'
+  - 'TOGGLE'
+  - 'TUNNELS'
+
+#How to start crawling for HOLD and TOGGLE modes:
+#DOUBLE_SHIFT - double shift
+#DOWN_DOUBLE_SHIFT - double shift while looking down
+#HOLD_X - hold shift for X seconds while looking down. Examples: 'HOLD_1', 'HOLD_0.5'
+
+#You can use multiple options at the same time
+start_crawling:
+  - 'DOWN_DOUBLE_SHIFT'
+
+############################################
+
+
+#List of blocks that players cant crawl on
+blacklisted_blocks:
+  - MAGMA_BLOCK
+
+#blacklisted_blocks: [] - use this if you dont want any blocks to be blacklisted
+
+#If true, players will only be able to crawl on blacklisted blocks
+reverse_blocks_blacklist: false
+
+
+############################################
+
+
+#List of worlds in which players cant crawl
+blacklisted_worlds:
+  - example_world
+
+#If true, players will only be able to crawl in blacklisted worlds
+reverse_worlds_blacklist: false
+
+#If you want to disable crawling just in a region, use the WorldGuard flag 'crawling'
+
+
+############################################
+
+#If true, players need the permission "crawling.player" to be able to crawl
+need_permission_to_crawl: false
+command_no_permission_message: '&cYou don''t have the permission to do that!'
+
+
+############################################
+
+
+ignore_updates: false
