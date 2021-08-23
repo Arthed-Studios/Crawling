@@ -9,7 +9,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-/*
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.Association;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -20,13 +19,11 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
-*/
 
 
 import me.arthed.crawling.Crawling;
 
 public class WorldGuardUtils {
-/*
     private final Plugin owningPlugin = Crawling.getInstance();
     private Object worldGuard = null;
     private WorldGuardPlugin worldGuardPlugin = null;
@@ -157,7 +154,6 @@ public class WorldGuardUtils {
         }
     }
 
-    @Nullable
     private RegionManager getRegionManager(World world) {
         initialize();
         if (regionContainer == null || regionContainerGetMethod == null) return null;
@@ -175,7 +171,6 @@ public class WorldGuardUtils {
         return regionManager;
     }
 
-    @Nullable
     private ApplicableRegionSet getRegionSet(Location location) {
         RegionManager regionManager = getRegionManager(location.getWorld());
         if (regionManager == null) return null;
@@ -201,6 +196,6 @@ public class WorldGuardUtils {
         if (checkSet == null) return true;
 
         return checkSet.queryState(getAssociable(player), ALLOW_CRAWLING) != StateFlag.State.DENY;
-    }*/
+    }
 
 }
