@@ -3,10 +3,7 @@ plugins {
 }
 
 group = 'me.arthed.crawling'
-version = '5.1.0'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+version = '5.1.1'
 
 repositories {
     mavenCentral()
@@ -15,17 +12,13 @@ repositories {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
     maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
-    }
-    maven {
         name = 'worldguard'
         url = 'https://maven.enginehub.org/repo/'
     }
 }
 
 dependencies {
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.5-SNAPSHOT'
     compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
-    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.6-SNAPSHOT'
 }
 

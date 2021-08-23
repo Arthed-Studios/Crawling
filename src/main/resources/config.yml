@@ -32,7 +32,7 @@ start_crawling:
 blacklisted_blocks:
   - MAGMA_BLOCK
 
-#blacklisted_blocks: [] - use this if you dont want any blocks to be blacklisted
+#blacklisted_blocks: [] - use this if you don't want any blocks to be blacklisted
 
 #If true, players will only be able to crawl on blacklisted blocks
 reverse_blocks_blacklist: false
