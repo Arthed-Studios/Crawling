@@ -124,7 +124,8 @@ public class CrPlayer {
 
         player.setSwimming(false);
 
-        updateTask.cancel();
+        if(updateTask != null)
+            updateTask.cancel();
 
         for(Block barrier : barrierBlocks) {
             BlockUtils.revertBlockPacket(player, barrier);
@@ -135,9 +136,9 @@ public class CrPlayer {
     }
 
     private boolean canCrawl() {
-/*        if(plugin.worldGuard != null)
+        if(plugin.worldGuard != null)
             if(!plugin.worldGuard.canCrawl(player))
-                return false;*/
+                return false;
 
         boolean isOnBlacklistedBlock = plugin.config.getMaterialList("blacklisted_blocks").contains(player.getLocation().clone().subtract(0, 0.4, 0).getBlock().getType());
         if(plugin.config.getBoolean("reverse_blocks_blacklist")) {
