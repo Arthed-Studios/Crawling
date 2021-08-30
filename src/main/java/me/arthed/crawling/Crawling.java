@@ -69,7 +69,7 @@ public class Crawling extends JavaPlugin implements Listener {
     public void onLoad() {
         Plugin worldGuardPlugin = getServer().getPluginManager().getPlugin("WorldGuard");
         if (worldGuardPlugin != null) {
-            //worldGuard = new WorldGuardUtils(worldGuardPlugin, this);
+            worldGuard = new WorldGuardUtils(worldGuardPlugin, this);
         }
     }
 
