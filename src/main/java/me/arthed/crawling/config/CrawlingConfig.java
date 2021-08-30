@@ -48,23 +48,6 @@ public class CrawlingConfig extends YamlConfiguration {
         }
     }
 
-    public void save() {
-        try {
-            save(configFile);
-        } catch(IOException ioException) {
-            ioException.printStackTrace();
-        }
-    }
-
-    public Material getMaterial(String path) {
-        if(data.containsKey(path))
-            return (Material)data.get(path);
-
-        Material result = Material.valueOf(getString(path));
-        data.put(path, result);
-        return result;
-    }
-
     public List<Material> getMaterialList(String path) {
         if(data.containsKey(path))
             return (List<Material>)data.get(path);
@@ -75,15 +58,6 @@ public class CrawlingConfig extends YamlConfiguration {
                 result.add(Material.valueOf(materialName));
             } catch(IllegalArgumentException ignore) {}
         }
-        data.put(path, result);
-        return result;
-    }
-
-    public World getWorld(String path) {
-        if(data.containsKey(path))
-            return (World)data.get(path);
-
-        World result = Bukkit.getWorld(getString(path));
         data.put(path, result);
         return result;
     }
