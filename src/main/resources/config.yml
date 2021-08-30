@@ -17,13 +17,12 @@ crawling_modes:
   - 'TUNNELS'
 
 #How to start crawling for HOLD and TOGGLE modes:
-#DOUBLE_SHIFT - double shift
-#DOWN_DOUBLE_SHIFT - double shift while looking down
+#DOUBLE_SHIFT - double shift while looking down
 #HOLD_X - hold shift for X seconds while looking down. Examples: 'HOLD_1', 'HOLD_0.5'
 
 #You can use multiple options at the same time
 start_crawling:
-  - 'DOWN_DOUBLE_SHIFT'
+  - 'DOUBLE_SHIFT'
 
 ############################################
 
