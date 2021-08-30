@@ -1,4 +1,4 @@
-package me.arthed.crawling.utils;
+package me.arthed.crawling.impl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -23,7 +23,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 
 import me.arthed.crawling.Crawling;
 
-public class WorldGuardUtils {
+public class WorldGuardImplementation {
     private final Plugin owningPlugin = Crawling.getInstance();
     private Object worldGuard = null;
     private WorldGuardPlugin worldGuardPlugin = null;
@@ -42,7 +42,7 @@ public class WorldGuardUtils {
         return worldGuardPlugin != null;
     }
 
-    public WorldGuardUtils(Plugin plugin, Plugin owningPlugin) {
+    public WorldGuardImplementation(Plugin plugin, Plugin owningPlugin) {
         if (plugin instanceof WorldGuardPlugin) {
             worldGuardPlugin = (WorldGuardPlugin)plugin;
 
