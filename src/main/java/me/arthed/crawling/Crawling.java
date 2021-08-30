@@ -7,23 +7,14 @@ import me.arthed.crawling.listeners.SneakingListener;
 import me.arthed.crawling.listeners.SwimmingToggleListener;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
-import net.minecraft.server.v1_16_R3.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
-import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.arthed.crawling.config.CrawlingConfig;
 import me.arthed.crawling.players.PlayerManager;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
@@ -46,7 +37,7 @@ public class Crawling extends JavaPlugin implements Listener {
 
     private PlayerManager playerManager;
     public PlayerManager getPlayerManager() {
-        return this.playerManager
+        return this.playerManager;
     }
 
     @Override
