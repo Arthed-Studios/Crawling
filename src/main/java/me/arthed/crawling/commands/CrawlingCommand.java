@@ -22,13 +22,13 @@ public class CrawlingCommand implements CommandExecutor, TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("crawling")) {
             if(!sender.hasPermission("crawl.admin") && !sender.hasPermission("crawling.admin")) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(this.plugin.config.getString("command_no_permission_message"))));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(this.plugin.getConfig().getString("command_no_permission_message"))));
                 return false;
             }
             if(args.length > 0 && args[0].equalsIgnoreCase("reload")) {
                 this.plugin.saveDefaultConfig();
                 this.plugin.reloadConfig();
-                this.plugin.config.reload();
+                this.plugin.getConfig().reload();
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&bConfig successfully reloaded!"));
                 return true;
             }
