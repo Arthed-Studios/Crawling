@@ -20,8 +20,6 @@ public class CrPlayer {
     private BukkitTask moveTask; // task running every 3 ticks making sure the barrier is above the player
     private BukkitTask canCrawlTask; // task running every 20 ticks checking if the player can continue crawling
 
-    private PotionEffect oldJumpPotionEffect;
-
     private Boolean toggleMode;
 
     protected CrPlayer(Player player) {
@@ -38,14 +36,8 @@ public class CrPlayer {
         this.barrierBlock = player.getLocation().getBlock();
 
         this.player.setSwimming(true);
-        //stop players from jumping while crawling
-        if(this.player.hasPotionEffect(PotionEffectType.JUMP)) {
-            this.oldJumpPotionEffect = this.player.getPotionEffect(PotionEffectType.JUMP);
-        }
 
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999999, 100000, false, false, false));
-
-        this.moveTask = Bukkit.getScheduler().runTaskTimer(Crawling.getInstance(), () -> {
+        this.moveTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Crawling.getInstance(), () -> {
 
             Block blockAbovePlayer = this.player.getLocation().add(0, 1.5, 0).getBlock();
             if(!this.barrierBlock.equals(blockAbovePlayer)) {
@@ -56,16 +48,13 @@ public class CrPlayer {
                 }
             }
 
-        }, 0, 3); // runs every 3 ticks
+        }, 0, 1); // runs every 1 tick
 
         this.canCrawlTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Crawling.getInstance(), () -> {
             if(!Utils.canCrawl(this.player)) {
                 Bukkit.getScheduler().runTask(Crawling.getInstance(), this::stopCrawling);
             }
-            else if(!player.hasPotionEffect(PotionEffectType.JUMP)) {
-                Bukkit.getScheduler().runTask(Crawling.getInstance(), () -> this.player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999999, 100000, false, false, false)));
-            }
-        }, 20, 20); // runs every 20 ticks
+        }, 20, 20); // runs every 2 0 ticks
 
 
         // Check if toggle mode should be used
@@ -84,11 +73,6 @@ public class CrPlayer {
     }
 
     public void stopCrawling() {
-        this.player.removePotionEffect(PotionEffectType.JUMP);
-        if(this.oldJumpPotionEffect != null) {
-            this.player.addPotionEffect(this.oldJumpPotionEffect);
-        }
-
         this.player.setSwimming(false);
 
         if(this.barrierBlock != null) {
