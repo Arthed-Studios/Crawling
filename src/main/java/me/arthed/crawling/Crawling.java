@@ -2,6 +2,7 @@ package me.arthed.crawling;
 
 import me.arthed.crawling.commands.CrawlingCommand;
 import me.arthed.crawling.impl.WorldGuardImplementation;
+import me.arthed.crawling.listeners.PlayerDeathListener;
 import me.arthed.crawling.listeners.PlayerInteractListener;
 import me.arthed.crawling.listeners.SneakingListener;
 import me.arthed.crawling.listeners.SwimmingToggleListener;
@@ -61,6 +62,7 @@ public class Crawling extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new SneakingListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         getServer().getPluginManager().registerEvents(new SwimmingToggleListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
 
         Objects.requireNonNull(this.getCommand("crawling")).setExecutor(new CrawlingCommand(this));
 
