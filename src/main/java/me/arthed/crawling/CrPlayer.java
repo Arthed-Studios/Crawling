@@ -54,6 +54,8 @@ public class CrPlayer {
             if(!Utils.canCrawl(this.player)) {
                 Bukkit.getScheduler().runTask(Crawling.getInstance(), this::stopCrawling);
             }
+            else if(this.player.getVelocity().getY() > 0 && this.player.getNoDamageTicks() == 0)
+                Bukkit.getScheduler().runTask(Crawling.getInstance(), this::stopCrawling);
         }, 20, 20); // runs every 20 ticks
 
 
