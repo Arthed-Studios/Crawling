@@ -2,11 +2,13 @@ package me.arthed.crawling;
 
 import me.arthed.crawling.commands.CrawlingCommand;
 import me.arthed.crawling.impl.WorldGuardImplementation;
+import me.arthed.crawling.listeners.PlayerDamageListener;
 import me.arthed.crawling.listeners.PlayerInteractListener;
 import me.arthed.crawling.listeners.SneakingListener;
 import me.arthed.crawling.listeners.SwimmingToggleListener;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
+import me.arthed.crawling.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -60,6 +62,7 @@ public class Crawling extends JavaPlugin implements Listener {
 
         getServer().getPluginManager().registerEvents(new SneakingListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDamageListener(), this);
         getServer().getPluginManager().registerEvents(new SwimmingToggleListener(), this);
 
         Objects.requireNonNull(this.getCommand("crawling")).setExecutor(new CrawlingCommand(this));
