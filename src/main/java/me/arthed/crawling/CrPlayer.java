@@ -48,7 +48,7 @@ public class CrPlayer {
                 }
             }
 
-        }, 0, 3); // runs every 3 ticks
+        }, 0, 1); // runs every 3 ticks
 
         this.canCrawlTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Crawling.getInstance(), () -> {
             if(!Utils.canCrawl(this.player)) {
