@@ -1,17 +1,18 @@
 package me.arthed.crawling;
 
 import me.arthed.crawling.config.CrawlingConfig;
+import me.arthed.crawling.utils.BlockUtils;
 import me.arthed.crawling.utils.Utils;
+import me.arthed.nms.NmsPackets;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 public class CrPlayer {
 
     private final static Crawling crawling = Crawling.getInstance();
+    private final static NmsPackets nmsPacketManager = crawling.getNmsPacketManager();
 
     private final Player player;
 
@@ -41,14 +42,10 @@ public class CrPlayer {
 
             Block blockAbovePlayer = this.player.getLocation().add(0, 1.5, 0).getBlock();
             if(!this.barrierBlock.equals(blockAbovePlayer)) {
-                Utils.revertBlockPacket(this.player, this.barrierBlock);
-                this.barrierBlock = blockAbovePlayer;
-                if(blockAbovePlayer.isPassable()) {
-                    this.player.sendBlockChange(blockAbovePlayer.getLocation(), Utils.BARRIER_BLOCK_DATA);
-                }
+                this.replaceBarrier(blockAbovePlayer);
             }
 
-        }, 0, 1); // runs every 3 ticks
+        }, 0, 1); // runs every tick
 
         this.canCrawlTask = Bukkit.getScheduler().runTaskTimerAsynchronously(Crawling.getInstance(), () -> {
             if(!Utils.canCrawl(this.player)) {
@@ -65,22 +62,34 @@ public class CrPlayer {
         boolean hold = config.getStringList("crawling_modes").contains("HOLD");
         boolean toggle = config.getStringList("crawling_modes").contains("TOGGLE");
         if(hold && toggle) {
-            Bukkit.getScheduler().runTaskLater(Crawling.getInstance(), () -> {
-                this.toggleMode = !this.player.isSneaking();
-            }, 10);
+            Bukkit.getScheduler().runTaskLater(Crawling.getInstance(), () -> this.toggleMode = !this.player.isSneaking(), 10);
         }
         else {
             this.toggleMode = toggle;
         }
     }
 
-    public void stopCrawling() {
-        this.player.removePotionEffect(PotionEffectType.JUMP);
+    public void replaceBarrier(Block blockAbovePlayer) {
+        Utils.revertBlockPacket(this.player, this.barrierBlock);
+        Utils.revertBlockPacket(this.player, this.barrierBlock.getLocation().subtract(0, 2, 0).getBlock());
+        nmsPacketManager.removeFakeBlocks(this.player);
+        this.barrierBlock = blockAbovePlayer;
+        if(blockAbovePlayer.isPassable() || BlockUtils.nonFullBlocks.contains(blockAbovePlayer.getType())) {
+            this.player.sendBlockChange(blockAbovePlayer.getLocation(), Utils.BARRIER_BLOCK_DATA);
+            if(!blockAbovePlayer.getType().isAir()) {
+                Block floorBlock = blockAbovePlayer.getLocation().subtract(0, 2, 0).getBlock();
+                nmsPacketManager.spawnFakeBlocks(this.player, blockAbovePlayer, floorBlock, BlockUtils.similarSoundBlocks.get(floorBlock.getType()));
+            }
+        }
+    }
 
+    public void stopCrawling() {
         this.player.setSwimming(false);
 
         if(this.barrierBlock != null) {
             Utils.revertBlockPacket(this.player, this.barrierBlock);
+            Utils.revertBlockPacket(this.player, this.barrierBlock.getLocation().subtract(0, 2, 0).getBlock());
+            nmsPacketManager.removeFakeBlocks(this.player);
         }
 
         if(this.moveTask != null) {
