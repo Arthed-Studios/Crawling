@@ -6,8 +6,11 @@ import me.arthed.crawling.listeners.PlayerDeathListener;
 import me.arthed.crawling.listeners.PlayerInteractListener;
 import me.arthed.crawling.listeners.SneakingListener;
 import me.arthed.crawling.listeners.SwimmingToggleListener;
+import me.arthed.crawling.nms.v1_16.NmsPackets_v1_16;
+import me.arthed.crawling.utils.BlockUtils;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
+import me.arthed.nms.NmsPackets;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -30,6 +33,11 @@ public class Crawling extends JavaPlugin implements Listener {
 
     private final HashMap<Player, CrPlayer> playersCrawling = new HashMap<>();
 
+    private NmsPackets nmsPacketManager;
+    public NmsPackets getNmsPacketManager() {
+        return nmsPacketManager;
+    }
+
     private WorldGuardImplementation worldGuard;
     public WorldGuardImplementation getWorldGuard() {
         return this.worldGuard;
@@ -42,12 +50,18 @@ public class Crawling extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        //Check if version is compatible
-        if (!Bukkit.getVersion().contains("1.13") &&
-                !Bukkit.getVersion().contains("1.14") &&
-                !Bukkit.getVersion().contains("1.15") &&
-                !Bukkit.getVersion().contains("1.16") &&
-                !Bukkit.getVersion().contains("1.17")) {
+        //Check if version is compatible and set the proper nms packet manager
+        if(Bukkit.getVersion().contains("1.13"))
+            this.nmsPacketManager = new NmsPackets_v1_16();
+        else if(Bukkit.getVersion().contains("1.14"))
+            this.nmsPacketManager = new NmsPackets_v1_16();
+        else if(Bukkit.getVersion().contains("1.15"))
+            this.nmsPacketManager = new NmsPackets_v1_16();
+        else if(Bukkit.getVersion().contains("1.16"))
+            this.nmsPacketManager = new NmsPackets_v1_16();
+        else if(Bukkit.getVersion().contains("1.17"))
+            this.nmsPacketManager = new NmsPackets_v1_16();
+        else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSorry, this plugin works only on 1.13 or higher versions."));
             Bukkit.getPluginManager().disablePlugin(plugin);
             return;
@@ -65,6 +79,7 @@ public class Crawling extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
 
         Objects.requireNonNull(this.getCommand("crawling")).setExecutor(new CrawlingCommand(this));
+        BlockUtils.setup();
 
         saveDefaultConfig();
 
@@ -75,7 +90,7 @@ public class Crawling extends JavaPlugin implements Listener {
     @Override
     public void onLoad() {
         Plugin worldGuardPlugin = getServer().getPluginManager().getPlugin("WorldGuard");
-        if (worldGuardPlugin != null) {
+        if(worldGuardPlugin != null) {
             worldGuard = new WorldGuardImplementation(worldGuardPlugin, this);
         }
     }
