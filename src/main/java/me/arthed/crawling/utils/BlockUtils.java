@@ -25,12 +25,16 @@ public class BlockUtils {
             try {
                 for (String line = brNonFullBlocks.readLine(); line != null; line = brNonFullBlocks.readLine()) {
                     try {
-                        nonFullBlocks.add(Material.valueOf(line));
+                        Material material = Material.valueOf(line);
+                        nonFullBlocks.add(material);
+                        similarSoundBlocks.put(material, Material.BARRIER);
                     } catch(IllegalArgumentException ignore) {}
                 }
-                for (String line = brSimilarSounds.readLine(); line != null; line = brNonFullBlocks.readLine()) {
-                    String[] materials = line.split(":");
-                    similarSoundBlocks.put(Material.valueOf(materials[0]), Material.valueOf(materials[1]));
+                for (String line = brSimilarSounds.readLine(); line != null; line = brSimilarSounds.readLine()) {
+                    try {
+                        String[] materials = line.split(":");
+                        similarSoundBlocks.put(Material.valueOf(materials[0]), Material.valueOf(materials[1]));
+                    } catch(IllegalArgumentException ignore) {}
                 }
             } catch (IOException e) {
                 e.printStackTrace();
