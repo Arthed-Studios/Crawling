@@ -62,6 +62,8 @@ public class Crawling extends JavaPlugin implements Listener {
             this.nmsPacketManager = new NmsPackets_v1_16();
         else if(Bukkit.getVersion().contains("1.17"))
             this.nmsPacketManager = new NmsPackets_v1_17();
+        else if(Bukkit.getVersion().contains("1.18"))
+            this.nmsPacketManager = new NmsPackets_v1_17();
         else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSorry, this plugin works only on 1.14 or higher versions."));
             Bukkit.getPluginManager().disablePlugin(plugin);
