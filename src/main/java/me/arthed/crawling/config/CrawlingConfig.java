@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -48,11 +45,11 @@ public class CrawlingConfig extends YamlConfiguration {
         }
     }
 
-    public List<Material> getMaterialList(String path) {
+    public Set<Material> getMaterialList(String path) {
         if(data.containsKey(path))
-            return (List<Material>)data.get(path);
+            return (Set<Material>)data.get(path);
 
-        List<Material> result = new ArrayList<>();
+        Set<Material> result = new HashSet<>();
         for(String materialName : getStringList(path)) {
             try {
                 result.add(Material.valueOf(materialName));
@@ -62,11 +59,11 @@ public class CrawlingConfig extends YamlConfiguration {
         return result;
     }
 
-    public List<World> getWorldList(String path) {
+    public Set<World> getWorldList(String path) {
         if(data.containsKey(path))
-            return (List<World>)data.get(path);
+            return (Set<World>)data.get(path);
 
-        List<World> result = new ArrayList<>();
+        Set<World> result = new HashSet<>();
         for(String worldName : getStringList(path)) {
             World world = Bukkit.getWorld(worldName);
             if(world != null)

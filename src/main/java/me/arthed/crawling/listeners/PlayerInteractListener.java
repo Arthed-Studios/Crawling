@@ -1,6 +1,6 @@
 package me.arthed.crawling.listeners;
 
-import me.arthed.crawling.utils.Utils;
+import me.arthed.crawling.utils.BlockUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,9 +18,10 @@ public class PlayerInteractListener implements Listener {
         Bukkit.getScheduler().runTaskAsynchronously(crawling, () -> {
             if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                 if (event.getClickedBlock() != null) {
-                    if (event.getClickedBlock().equals(event.getPlayer().getLocation().add(0, 1.5, 0).getBlock())) {
+                    if ((event.getClickedBlock().isPassable() || BlockUtils.nonFullBlocks.contains(event.getClickedBlock().getType())) && event.getClickedBlock().equals(event.getPlayer().getLocation().add(0, 1.5, 0).getBlock())) {
                         if (crawling.isCrawling(event.getPlayer())) {
-                            event.getPlayer().sendBlockChange(event.getClickedBlock().getLocation(), Utils.BARRIER_BLOCK_DATA);
+                            event.setCancelled(true);
+                            crawling.getPlayerCrawling(event.getPlayer()).replaceBarrier(event.getClickedBlock());
                         }
                     }
                 }

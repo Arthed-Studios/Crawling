@@ -26,6 +26,9 @@ public class Utils {
     }
 
     public static boolean canCrawl(Player player) {
+        if(config.getBoolean("need_permission_to_crawl"))
+            if(!player.hasPermission("crawling.player"))
+                return false;
         if (worldGuard != null)
             if (!worldGuard.canCrawl(player))
                 return false;
