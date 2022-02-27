@@ -26,6 +26,7 @@ public class SneakingListener implements Listener {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent event) {
+        if(!event.getPlayer().isOnGround()) return;
         Bukkit.getScheduler().runTaskAsynchronously(crawling, () -> {
 
             Player player = event.getPlayer();
