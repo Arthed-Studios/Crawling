@@ -95,3 +95,6 @@ ignore_updates: false
 ![](https://i.imgur.com/Pwsgenu.png)
 
 [![Discord](https://i.imgur.com/xGgAO7c.png)](https://discord.gg/MPKVEcX)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[![Spigot Page](https://i.imgur.com/idUVHgU.png)](https://www.spigotmc.org/resources/crawling.69126/)
+
+# Compile
+just use shadowJar

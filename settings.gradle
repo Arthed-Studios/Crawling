@@ -1,2 +1,2 @@
 rootProject.name = 'Crawling'
-include 'v1_18', 'v1_17', 'v1_16', 'v1_15', 'v1_14', 'NMS'
+include 'v1_18_2', 'v1_18', 'v1_17', 'v1_16', 'v1_15', 'v1_14', 'NMS'
