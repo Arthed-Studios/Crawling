@@ -10,6 +10,7 @@ import me.arthed.crawling.nms.v1_15.NmsPackets_v1_15;
 import me.arthed.crawling.nms.v1_16.NmsPackets_v1_16;
 import me.arthed.crawling.nms.v1_17.NmsPackets_v1_17;
 import me.arthed.crawling.nms.v1_18.NmsPackets_v1_18;
+import me.arthed.crawling.nms.v1_18_2.NmsPackets_v1_18_2;
 import me.arthed.crawling.utils.BlockUtils;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
@@ -63,8 +64,12 @@ public class Crawling extends JavaPlugin implements Listener {
             this.nmsPacketManager = new NmsPackets_v1_16();
         else if(Bukkit.getVersion().contains("1.17"))
             this.nmsPacketManager = new NmsPackets_v1_17();
-        else if(Bukkit.getVersion().contains("1.18"))
+        else if(Bukkit.getVersion().equals("1.18"))
             this.nmsPacketManager = new NmsPackets_v1_18();
+        else if(Bukkit.getVersion().equals("1.18.1"))
+            this.nmsPacketManager = new NmsPackets_v1_18();
+        else if(Bukkit.getVersion().equals("1.18.2"))
+            this.nmsPacketManager = new NmsPackets_v1_18_2();
         else {
             Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSorry, this plugin works only on 1.14 or higher versions."));
             Bukkit.getPluginManager().disablePlugin(plugin);
