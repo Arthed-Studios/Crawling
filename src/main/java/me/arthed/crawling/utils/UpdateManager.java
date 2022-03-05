@@ -32,39 +32,40 @@ public class UpdateManager implements Listener {
             URL url = null;
             try {
                 url = new URL("https://api.spigotmc.org/legacy/update.php?resource=69126");
-            } catch (MalformedURLException ignored) {}
+            } catch (MalformedURLException ignored) {
+            }
             URLConnection conn = null;
             try {
                 assert url != null;
                 conn = url.openConnection();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
             try {
                 assert conn != null;
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 if (br.readLine().equals(currentVersion)) {
                     update = Boolean.FALSE;
-                }
-                else {
+                } else {
                     update = Boolean.TRUE;
-                    if (currentVersion.equals("5.2.2-SNAPSHOT")){
+                    if (currentVersion.equals("5.2.2-SNAPSHOT")) {
                         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
-                        for(Player p : Bukkit.getOnlinePlayers()) {
-                            if(p.isOp()) {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (p.isOp()) {
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
                             }
                         }
-                    }
-                    else{
+                    } else {
                         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
-                        for(Player p : Bukkit.getOnlinePlayers()) {
-                            if(p.isOp()) {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (p.isOp()) {
                                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
                             }
                         }
                     }
 
                 }
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         });
 
         thread.start();
@@ -74,8 +75,13 @@ public class UpdateManager implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if(p.isOp() && update) {
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
+        if (p.isOp() && update) {
+            if (currentVersion.equals("5.2.2-SNAPSHOT")) {
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
+            } else {
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
+
+            }
         }
     }
 
