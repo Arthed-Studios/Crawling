@@ -83,6 +83,9 @@ ignore_updates: false
   ```
 </details>
 
+![](https://i.imgur.com/Pwsgenu.png)
+# Compile
+Using ShadowJar (Gradle Java 16)
 
 ![](https://i.imgur.com/Pwsgenu.png)
 # Statistics

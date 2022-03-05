@@ -43,14 +43,26 @@ public class UpdateManager implements Listener {
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 if (br.readLine().equals(currentVersion)) {
                     update = Boolean.FALSE;
-                } else {
+                }
+                else {
                     update = Boolean.TRUE;
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
-                    for(Player p : Bukkit.getOnlinePlayers()) {
-                        if(p.isOp()) {
-                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
+                    if (currentVersion.equals("5.2.2-SNAPSHOT")){
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
+                        for(Player p : Bukkit.getOnlinePlayers()) {
+                            if(p.isOp()) {
+                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
+                            }
                         }
                     }
+                    else{
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
+                        for(Player p : Bukkit.getOnlinePlayers()) {
+                            if(p.isOp()) {
+                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
+                            }
+                        }
+                    }
+
                 }
             } catch (IOException ignored) {}
         });

@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 group = 'me.arthed.crawling'
-version = '5.2.1'
+version = '5.2.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -18,9 +19,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.5-SNAPSHOT'
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
     compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
     implementation project(':NMS')
+    implementation project(':v1_18_2')
     implementation project(':v1_18')
     implementation project(':v1_17')
     implementation project(':v1_16')
