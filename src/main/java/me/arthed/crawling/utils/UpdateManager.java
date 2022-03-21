@@ -47,7 +47,7 @@ public class UpdateManager implements Listener {
                     update = Boolean.FALSE;
                 } else {
                     update = Boolean.TRUE;
-                    if (currentVersion.equals("5.2.2-SNAPSHOT")) {
+                    if (currentVersion.contains("SNAPSHOT")) {
                         Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
                         for (Player p : Bukkit.getOnlinePlayers()) {
                             if (p.isOp()) {
@@ -76,7 +76,7 @@ public class UpdateManager implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (p.isOp() && update) {
-            if (currentVersion.equals("5.2.2-SNAPSHOT")) {
+            if (currentVersion.contains("SNAPSHOT")) {
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
             } else {
                 p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));

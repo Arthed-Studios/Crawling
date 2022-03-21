@@ -5,6 +5,9 @@ import me.arthed.crawling.Crawling;
 import me.arthed.crawling.config.CrawlingConfig;
 import me.arthed.crawling.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,12 +29,26 @@ public class SneakingListener implements Listener {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent event) {
-        if(!event.getPlayer().isOnGround()){
+        Player player = event.getPlayer();
+        if(!player.isOnGround() || player.isInsideVehicle() || player.isFlying() || player.isGliding()){
+            return;
+        }
+        Block headBlock = player.getEyeLocation().getBlock();
+        if (headBlock.getType()== Material.WATER || headBlock.getType()==Material.BUBBLE_COLUMN
+                || headBlock.getType()==Material.KELP || headBlock.getType()==Material.KELP_PLANT
+                || headBlock.getType()==Material.SEAGRASS || headBlock.getType()==Material.TALL_SEAGRASS
+                || (headBlock.getBlockData() instanceof Waterlogged && ((Waterlogged) headBlock.getBlockData()).isWaterlogged())){
+            return;
+        }
+        Block playerBlock = player.getLocation().getBlock();
+        if (playerBlock.getType()== Material.WATER || playerBlock.getType()==Material.BUBBLE_COLUMN
+                || playerBlock.getType()==Material.KELP || playerBlock.getType()==Material.KELP_PLANT
+                || playerBlock.getType()==Material.SEAGRASS || playerBlock.getType()==Material.TALL_SEAGRASS
+                || (playerBlock.getBlockData() instanceof Waterlogged && ((Waterlogged) playerBlock.getBlockData()).isWaterlogged())){
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(crawling, () -> {
 
-            Player player = event.getPlayer();
             CrPlayer crPlayer = crawling.getPlayerCrawling(player);
 
             if(event.isSneaking()) {
