@@ -1,5 +1,5 @@
 name: Crawling
-version: '5.2.1'
+version: '5.2.3-SNAPSHOT'
 main: me.arthed.crawling.Crawling
 api-version: 1.13
 softdepend: [ WorldGuard ]
