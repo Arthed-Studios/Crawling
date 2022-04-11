@@ -1,0 +1,20 @@
+plugins {
+    id 'application'
+}
+
+group = 'me.arthed'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://repo.codemc.org/repository/nms/' }
+}
+
+dependencies {
+    implementation 'io.papermc.paper:paper-server:1.18.2-R0.1-SNAPSHOT'
+    implementation project(':NMS')
+}
+
+task prepareKotlinBuildScriptModel {
+
+}
