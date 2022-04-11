@@ -6,15 +6,11 @@ import me.arthed.crawling.listeners.PlayerDeathListener;
 import me.arthed.crawling.listeners.PlayerInteractListener;
 import me.arthed.crawling.listeners.SneakingListener;
 import me.arthed.crawling.listeners.SwimmingToggleListener;
-import me.arthed.crawling.nms.v1_15.NmsPackets_v1_15;
-import me.arthed.crawling.nms.v1_16.NmsPackets_v1_16;
-import me.arthed.crawling.nms.v1_17.NmsPackets_v1_17;
-import me.arthed.crawling.nms.v1_18.NmsPackets_v1_18;
+import me.arthed.crawling.nms.VersionIndependentNmsPackets;
 import me.arthed.crawling.utils.BlockUtils;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
 import me.arthed.nms.NmsPackets;
-import me.arthed.nms.v1_14.NmsPackets_v1_14;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -37,7 +33,7 @@ public class Crawling extends JavaPlugin implements Listener {
 
     private final HashMap<Player, CrPlayer> playersCrawling = new HashMap<>();
 
-    private NmsPackets nmsPacketManager;
+    private final static NmsPackets nmsPacketManager = new VersionIndependentNmsPackets();
     public NmsPackets getNmsPacketManager() {
         return nmsPacketManager;
     }
@@ -52,23 +48,13 @@ public class Crawling extends JavaPlugin implements Listener {
         return this.config;
     }
 
+    private final static Runtime.Version bukkitVersion = Runtime.Version.parse(Bukkit.getBukkitVersion().substring(0,Bukkit.getBukkitVersion().indexOf("-")));
+    private final static Runtime.Version maxSupportedVersion = Runtime.Version.parse("1.18.2");
     @Override
     public void onEnable() {
-        //Check if version is compatible and set the proper nms packet manager
-        if(Bukkit.getVersion().contains("1.14"))
-            this.nmsPacketManager = new NmsPackets_v1_14();
-        else if(Bukkit.getVersion().contains("1.15"))
-            this.nmsPacketManager = new NmsPackets_v1_15();
-        else if(Bukkit.getVersion().contains("1.16"))
-            this.nmsPacketManager = new NmsPackets_v1_16();
-        else if(Bukkit.getVersion().contains("1.17"))
-            this.nmsPacketManager = new NmsPackets_v1_17();
-        else if(Bukkit.getVersion().contains("1.18"))
-            this.nmsPacketManager = new NmsPackets_v1_18();
-        else {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSorry, this plugin works only on 1.14 or higher versions."));
-            Bukkit.getPluginManager().disablePlugin(plugin);
-            return;
+        //Checking if version is not fully supported.
+        if (bukkitVersion.compareTo(maxSupportedVersion) > 0) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThe plugin was not made for this version, proceed with caution."));
         }
 
         //bstats
