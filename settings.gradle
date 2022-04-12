@@ -1,2 +1,2 @@
 rootProject.name = 'Crawling'
-include 'VersionIndependentNMS', 'NMS'
+include 'VersionIndependentNMS', 'LegacyIndependentNMS', 'NMS'
