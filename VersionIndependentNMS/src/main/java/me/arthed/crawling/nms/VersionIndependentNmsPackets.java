@@ -36,8 +36,7 @@ public class VersionIndependentNmsPackets implements NmsPackets {
     private static final Method method_CraftEntity_getNMS = getMethod(class_CraftEntity, "getHandle");
     private static final Method method_Entity_ai = find_Entity_ai();
 
-    public VersionIndependentNmsPackets() {
-        World world = Bukkit.getWorlds().get(0);
+    public VersionIndependentNmsPackets(World world) {
         FallingBlock fallingBlock = (FallingBlock) world.spawnEntity(new Location(world, 0, 0, 0), EntityType.FALLING_BLOCK);
         fallingBlock.setGravity(false);
         try {
@@ -57,6 +56,7 @@ public class VersionIndependentNmsPackets implements NmsPackets {
     private static final Field field_EntityPlayer_playerConnection = findField(EntityPlayer.class, PlayerConnection.class);
     private static final Method method_PlayerConnection_sendPacket = findMethod(PlayerConnection.class, Packet.class);
 
+    @Override
     public void spawnFakeBlocks(Player player, Block block, Block floorBlock, Material fakeFloorMaterial) {
         int blockMaterialId;
         int floorBlockMaterialId;
