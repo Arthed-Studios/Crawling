@@ -1,7 +1,7 @@
 name: Crawling
 version: '5.3.0'
 main: me.arthed.crawling.Crawling
-api-version: 1.17
+api-version: 1.14
 softdepend: [ WorldGuard ]
 authors: [ Arthed ]
 description: Improves the crawling mechanic in minecraft!
