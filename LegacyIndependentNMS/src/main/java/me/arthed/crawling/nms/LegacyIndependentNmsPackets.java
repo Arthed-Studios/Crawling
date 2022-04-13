@@ -17,6 +17,25 @@ import java.util.UUID;
 
 public class LegacyIndependentNmsPackets implements NmsPackets {
 
+    private static final String NMS_VERSION;
+
+    static {
+        if (getClass("org.bukkit.craftbukkit.CraftServer", false) == null) {
+            String CRAFTBUKKIT_VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+
+            if (getClass("net.minecraft.server.MinecraftServer", false) == null) {
+                NMS_VERSION = CRAFTBUKKIT_VERSION;
+            } else {
+                NMS_VERSION = "";
+            }
+        } else {
+            NMS_VERSION = "";
+        }
+
+        if (NMS_VERSION.equals(""))
+            throw new UnsupportedOperationException("LegacyIndependentNmsPackets must only be used on versions lower than 1.17");
+    }
+
     private final int blockId = -8854;
     private final int floorBlockId = -8855;
     private final Object dataWatcher;
@@ -114,25 +133,6 @@ public class LegacyIndependentNmsPackets implements NmsPackets {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static final String NMS_VERSION;
-
-    static {
-        if (getClass("org.bukkit.craftbukkit.CraftServer", false) == null) {
-            String CRAFTBUKKIT_VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-
-            if (getClass("net.minecraft.server.MinecraftServer", false) == null) {
-                NMS_VERSION = CRAFTBUKKIT_VERSION;
-            } else {
-                NMS_VERSION = "";
-            }
-        } else {
-            NMS_VERSION = "";
-        }
-
-        if (NMS_VERSION.equals(""))
-            throw new UnsupportedOperationException("LegacyIndependentNmsPackets must only be used on versions lower than 1.17");
     }
 
     private static Class<?> getClass(String name, boolean b) {
