@@ -4,8 +4,10 @@ plugins {
 
 group = 'me.arthed'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 repositories {
-    mavenCentral()
     maven {
         name = 'codemc-repo'
         url = 'https://repo.codemc.org/repository/nms/'
