@@ -12,6 +12,7 @@ import me.arthed.crawling.nms.VersionIndependentNmsPackets;
 import me.arthed.crawling.utils.BlockUtils;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
+import me.arthed.crawling.utils.Version;
 import me.arthed.nms.NmsPackets;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -48,13 +49,13 @@ public class Crawling extends JavaPlugin implements Listener {
         return this.config;
     }
 
-    private final static Runtime.Version bukkitVersion = Runtime.Version.parse(Bukkit.getBukkitVersion().substring(0, Bukkit.getBukkitVersion().indexOf("-")));
-    private final static Runtime.Version maxSupportedVersion = Runtime.Version.parse("1.18.2");
-    private final static Runtime.Version minSupportedVersion = Runtime.Version.parse("1.14");
+    private final static Version bukkitVersion = new Version(Bukkit.getBukkitVersion().substring(0, Bukkit.getBukkitVersion().indexOf("-")));
+    private final static Version maxSupportedVersion = new Version("1.18.2");
+    private final static Version minSupportedVersion = new Version("1.14");
 
     private static boolean isLegacy() {
         try {
-            // The minecraft server version was removed from the package on newer versions.
+            // The minecraft server version was removed from the package name on newer versions.
             Class.forName("net.minecraft.server.MinecraftServer");
             return false;
         } catch (ClassNotFoundException e) {
