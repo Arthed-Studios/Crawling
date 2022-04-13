@@ -1,7 +1,6 @@
 package me.arthed.crawling.nms;
 
 import me.arthed.nms.NmsPackets;
-import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -126,8 +125,8 @@ public class LegacyIndependentNmsPackets implements NmsPackets {
     @Override
     public void removeFakeBlocks(Player player) {
         try {
-            Object destroyOldBlockPacket = constructor_PacketPlayOutEntityDestroy.newInstance(this.blockId);
-            Object destroyOldBlockPacket2 = constructor_PacketPlayOutEntityDestroy.newInstance(this.blockId - 1);
+            Object destroyOldBlockPacket = constructor_PacketPlayOutEntityDestroy.newInstance(new int[]{this.blockId});
+            Object destroyOldBlockPacket2 = constructor_PacketPlayOutEntityDestroy.newInstance(new int[]{this.blockId - 1});
             Object playerConnection = field_EntityPlayer_playerConnection.get(method_CraftPlayer_getHandle.invoke(class_CraftPlayer.cast(player)));
 
             method_PlayerConnection_sendPacket.invoke(playerConnection, destroyOldBlockPacket);
