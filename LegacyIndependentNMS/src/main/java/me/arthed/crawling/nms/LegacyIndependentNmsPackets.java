@@ -1,6 +1,7 @@
 package me.arthed.crawling.nms;
 
 import me.arthed.nms.NmsPackets;
+import net.minecraft.server.v1_16_R3.PacketPlayOutEntityDestroy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -63,11 +64,12 @@ public class LegacyIndependentNmsPackets implements NmsPackets {
     private static final Class<?> class_PacketPlayOutSpawnEntity = nmsClass("PacketPlayOutSpawnEntity");
     private static final Constructor<?> constructor_PacketPlayOutSpawnEntity = getConstructor(class_PacketPlayOutSpawnEntity, int.class, UUID.class, double.class, double.class, double.class, float.class, float.class, class_EntityTypes, int.class, class_Vec3D);
     private static final Object fallingBlock_EntityTypes = findFallingBlockEntityTypes();
+    private static final Class<?> class_IBlockData = nmsClass("IBlockData");
     private static final Class<?> class_Block = nmsClass("Block");
-    private static final Method method_Block_getCombinedId = getMethod(class_Block, "getCombinedId");
+    private static final Method method_Block_getCombinedId = getMethod(class_Block, "getCombinedId", class_IBlockData);
     private static final Class<?> class_CraftBlock = bukkitClass("block.CraftBlock");
     private static final Method method_CraftBlock_getNMS = getMethod(class_CraftBlock, "getNMS");
-    private static final Class<?> class_PacketPlayOutEntityMetadata = nmsClass("PacketPlayOutSpawnEntity");
+    private static final Class<?> class_PacketPlayOutEntityMetadata = nmsClass("PacketPlayOutEntityMetadata");
     private static final Constructor<?> constructor_PacketPlayOutEntityMetadata = getConstructor(class_PacketPlayOutEntityMetadata, int.class, class_DataWatcher, boolean.class);
     private static final Class<?> class_CraftPlayer = bukkitClass("entity.CraftPlayer");
     private static final Method method_CraftPlayer_getHandle = getMethod(class_CraftPlayer, "getHandle");
@@ -119,7 +121,7 @@ public class LegacyIndependentNmsPackets implements NmsPackets {
     }
 
     private static final Class<?> class_PacketPlayOutEntityDestroy = nmsClass("PacketPlayOutEntityDestroy");
-    private static final Constructor<?> constructor_PacketPlayOutEntityDestroy = getConstructor(class_PacketPlayOutEntityDestroy, int.class);
+    private static final Constructor<?> constructor_PacketPlayOutEntityDestroy = getConstructor(class_PacketPlayOutEntityDestroy, int[].class);
 
     @Override
     public void removeFakeBlocks(Player player) {
