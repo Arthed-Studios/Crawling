@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class VersionIndependentNmsPackets implements NmsPackets {
 
@@ -34,13 +35,13 @@ public class VersionIndependentNmsPackets implements NmsPackets {
 
     private static final Class<?> class_CraftEntity = bukkitClass("entity.CraftEntity");
     private static final Method method_CraftEntity_getNMS = getMethod(class_CraftEntity, "getHandle");
-    private static final Method method_Entity_ai = find_Entity_ai();
+    private static final Method method_Entity_getDataWatcher = find_Entity_getDataWatcher();
 
     public VersionIndependentNmsPackets(World world) {
         FallingBlock fallingBlock = (FallingBlock) world.spawnEntity(new Location(world, 0, 0, 0), EntityType.FALLING_BLOCK);
         fallingBlock.setGravity(false);
         try {
-            this.dataWatcher = (DataWatcher) method_Entity_ai.invoke(method_CraftEntity_getNMS.invoke(class_CraftEntity.cast(fallingBlock)));
+            this.dataWatcher = (DataWatcher) method_Entity_getDataWatcher.invoke(method_CraftEntity_getNMS.invoke(class_CraftEntity.cast(fallingBlock)));
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -62,8 +63,8 @@ public class VersionIndependentNmsPackets implements NmsPackets {
         int floorBlockMaterialId;
 
         try {
-            blockMaterialId = (int) method_Block_getCombinedId.invoke(method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(block)));
-            floorBlockMaterialId = (int) method_Block_getCombinedId.invoke(method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(floorBlock)));
+            blockMaterialId = (int) method_Block_getCombinedId.invoke(null, method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(block)));
+            floorBlockMaterialId = (int) method_Block_getCombinedId.invoke(null, method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(floorBlock)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -145,7 +146,7 @@ public class VersionIndependentNmsPackets implements NmsPackets {
             }
         }
 
-        throw new RuntimeException(new NoSuchMethodException("Method with parameters " + Arrays.stream(parameters).toList() + " not found in class '" + clazz + "'"));
+        throw new RuntimeException(new NoSuchMethodException("Method with parameters " + Arrays.stream(parameters).collect(Collectors.toList()) + " not found in class '" + clazz + "'"));
     }
 
     private static Field findField(Class<?> clazz, Class<?> type) {
@@ -168,7 +169,7 @@ public class VersionIndependentNmsPackets implements NmsPackets {
         throw new RuntimeException(new NoSuchMethodException("Could not find equivalent of method 'net.minecraft.world.level.block.Block#getCombinedId' in this minecraft version."));
     }
 
-    private static Method find_Entity_ai() {
+    private static Method find_Entity_getDataWatcher() {
         for (Method m : Entity.class.getMethods()) {
             if (m.getReturnType().equals(DataWatcher.class)) {
                 return m;

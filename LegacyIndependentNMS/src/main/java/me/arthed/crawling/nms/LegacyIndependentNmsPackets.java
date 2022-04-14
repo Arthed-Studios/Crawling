@@ -90,7 +90,7 @@ public class LegacyIndependentNmsPackets implements NmsPackets {
                     0, //yaw
                     0, //pitch
                     fallingBlock_EntityTypes,
-                    method_Block_getCombinedId.invoke(method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(block))), //material id
+                    method_Block_getCombinedId.invoke(null, method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(block))), //material id
                     constructor_Vec3D.newInstance(0, 1, 0) // velocity
             );
             Object blockMetadataPacket = constructor_PacketPlayOutEntityMetadata.newInstance(this.blockId, this.dataWatcher, true);
@@ -103,7 +103,7 @@ public class LegacyIndependentNmsPackets implements NmsPackets {
                     90, //yaw
                     0, //pitch
                     fallingBlock_EntityTypes,
-                    method_Block_getCombinedId.invoke(method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(floorBlock))), //material id
+                    method_Block_getCombinedId.invoke(null, method_CraftBlock_getNMS.invoke(class_CraftBlock.cast(floorBlock))), //material id
                     constructor_Vec3D.newInstance(0, 1, 0) // velocity
             );
             Object blockMetadataPacket2 = constructor_PacketPlayOutEntityMetadata.newInstance(this.floorBlockId, this.dataWatcher, true);
