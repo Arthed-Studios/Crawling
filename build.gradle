@@ -3,7 +3,20 @@ plugins {
 }
 
 group = 'me.arthed.crawling'
-version = '5.2.1'
+version = '5.3.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    extraLibs
+}
+
+jar {
+    from {
+	    configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}
 
 repositories {
     mavenCentral()
@@ -19,12 +32,11 @@ repositories {
 
 dependencies {
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.5-SNAPSHOT'
-    compileOnly 'org.spigotmc:spigot-api:1.17.1-R0.1-SNAPSHOT'
-    implementation project(':NMS')
-    implementation project(':v1_18')
-    implementation project(':v1_17')
-    implementation project(':v1_16')
-    implementation project(':v1_15')
-    implementation project(':v1_14')
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+    extraLibs project(':NMS')
+    extraLibs project(':VersionIndependentNMS')
+    extraLibs project(':LegacyIndependentNMS')
+	implementation project(':NMS')
+	implementation project(':VersionIndependentNMS')
+	implementation project(':LegacyIndependentNMS')
 }
-

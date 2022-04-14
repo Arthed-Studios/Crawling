@@ -18,13 +18,14 @@ import java.net.URLConnection;
 public class UpdateManager implements Listener {
 
     public boolean update;
-    private final String currentVersion;
+    private final Version currentVersion;
 
 
     public UpdateManager(JavaPlugin plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
-        this.currentVersion = plugin.getDescription().getVersion();
+        //Make sure plugin description version is always a valid version (i.e: 1.0, 4.1.2 etc), or errors will be thrown.
+        this.currentVersion = new Version(plugin.getDescription().getVersion());
     }
 
     public void checkUpdates() {
@@ -41,9 +42,8 @@ public class UpdateManager implements Listener {
             try {
                 assert conn != null;
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                if (br.readLine().equals(currentVersion)) {
-                    update = Boolean.FALSE;
-                } else {
+                //Checking if version is newer than the current.
+                if (new Version(br.readLine()).compareTo(currentVersion) > 0) {
                     update = Boolean.TRUE;
                     Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
                     for(Player p : Bukkit.getOnlinePlayers()) {
@@ -51,6 +51,8 @@ public class UpdateManager implements Listener {
                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
                         }
                     }
+                } else {
+                    update = Boolean.FALSE;
                 }
             } catch (IOException ignored) {}
         });
