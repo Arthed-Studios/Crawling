@@ -13,8 +13,8 @@ public class SwimmingToggleListener implements Listener {
 
     @EventHandler
     public void onEntityToggleSwim(EntityToggleSwimEvent e) {
-        if(!e.isSwimming() && e.getEntityType().equals(EntityType.PLAYER))
-            if(crawling.isCrawling((Player) e.getEntity())) {
+        if (!e.isSwimming() && e.getEntityType().equals(EntityType.PLAYER))
+            if (crawling.isCrawling((Player) e.getEntity())) {
                 e.setCancelled(true);
             }
     }

@@ -9,9 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
-
-import java.util.List;
 
 public class Utils {
 
@@ -26,8 +25,8 @@ public class Utils {
     }
 
     public static boolean canCrawl(Player player) {
-        if(config.getBoolean("need_permission_to_crawl"))
-            if(!player.hasPermission("crawling.player"))
+        if (config.getBoolean("need_permission_to_crawl"))
+            if (!player.hasPermission("crawling.player"))
                 return false;
         if (worldGuard != null)
             if (!worldGuard.canCrawl(player))
@@ -49,6 +48,11 @@ public class Utils {
         } else if (isInBlacklistedWorld)
             return false;
 
+        if (player.getLocation().getBlock().getBlockData() instanceof Waterlogged) {
+            return !player.isFlying() &&
+                    !player.getLocation().getBlock().isLiquid() &&
+                    player.isOnGround() && !((Waterlogged) player.getLocation().getBlock().getBlockData()).isWaterlogged();
+        }
         return !player.isFlying() &&
                 !player.getLocation().getBlock().isLiquid() &&
                 player.isOnGround();
@@ -64,8 +68,7 @@ public class Utils {
         if (block.getType().isSolid() && location.subtract(0, 1, 0).getBlock().isPassable()) {
             if (facing.equals(WallFace.EAST) || facing.equals(WallFace.WEST)) {
                 return Math.abs(location.getX() - block.getX()) < distanceLimit;
-            }
-            else {
+            } else {
                 return Math.abs(location.getZ() - block.getZ()) < distanceLimit;
             }
         }

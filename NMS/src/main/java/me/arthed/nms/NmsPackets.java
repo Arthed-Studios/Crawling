@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 public interface NmsPackets {
 
     void spawnFakeBlocks(Player player, Block block, Block floorBlock, Material fakeFloorMaterial);
+
     void removeFakeBlocks(Player player);
 
 }
