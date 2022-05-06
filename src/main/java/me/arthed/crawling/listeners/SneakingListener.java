@@ -26,8 +26,10 @@ public class SneakingListener implements Listener {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent event) {
+        if (!Utils.canCrawl(event.getPlayer())){
+            return; //Because canCrawl is not work in CrPlayer Class.
+        }
         Bukkit.getScheduler().runTaskAsynchronously(crawling, () -> {
-
             Player player = event.getPlayer();
             CrPlayer crPlayer = crawling.getPlayerCrawling(player);
 
