@@ -9,7 +9,7 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        if(Crawling.getInstance().isCrawling(event.getEntity()))
+        if (Crawling.getInstance().isCrawling(event.getEntity()))
             Crawling.getInstance().stopCrawling(event.getEntity());
     }
 

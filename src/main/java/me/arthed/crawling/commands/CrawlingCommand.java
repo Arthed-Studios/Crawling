@@ -21,11 +21,11 @@ public class CrawlingCommand implements CommandExecutor, TabExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("crawling")) {
-            if(!sender.hasPermission("crawl.admin") && !sender.hasPermission("crawling.admin")) {
+            if (!sender.hasPermission("crawl.admin") && !sender.hasPermission("crawling.admin")) {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(this.plugin.getConfig().getString("command_no_permission_message"))));
                 return false;
             }
-            if(args.length > 0 && args[0].equalsIgnoreCase("reload")) {
+            if (args.length > 0 && args[0].equalsIgnoreCase("reload")) {
                 this.plugin.saveDefaultConfig();
                 this.plugin.reloadConfig();
                 this.plugin.getConfig().reload();
@@ -45,8 +45,8 @@ public class CrawlingCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if(args.length == 1) {
-            if("reload".startsWith(args[0].toLowerCase())) {
+        if (args.length == 1) {
+            if ("reload".startsWith(args[0].toLowerCase())) {
                 return Collections.singletonList("reload");
             }
         }

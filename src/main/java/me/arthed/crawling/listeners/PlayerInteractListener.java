@@ -1,13 +1,12 @@
 package me.arthed.crawling.listeners;
 
+import me.arthed.crawling.Crawling;
 import me.arthed.crawling.utils.BlockUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-
-import me.arthed.crawling.Crawling;
 
 public class PlayerInteractListener implements Listener {
 

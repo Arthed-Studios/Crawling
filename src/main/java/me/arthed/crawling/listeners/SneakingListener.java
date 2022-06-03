@@ -5,9 +5,6 @@ import me.arthed.crawling.Crawling;
 import me.arthed.crawling.config.CrawlingConfig;
 import me.arthed.crawling.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,45 +26,30 @@ public class SneakingListener implements Listener {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent event) {
-        Player player = event.getPlayer();
-        if(!player.isOnGround() || player.isInsideVehicle() || player.isFlying() || player.isGliding()){
-            return;
-        }
-        Block headBlock = player.getEyeLocation().getBlock();
-        if (headBlock.getType()== Material.WATER || headBlock.getType()==Material.BUBBLE_COLUMN
-                || headBlock.getType()==Material.KELP || headBlock.getType()==Material.KELP_PLANT
-                || headBlock.getType()==Material.SEAGRASS || headBlock.getType()==Material.TALL_SEAGRASS
-                || (headBlock.getBlockData() instanceof Waterlogged && ((Waterlogged) headBlock.getBlockData()).isWaterlogged())){
-            return;
-        }
-        Block playerBlock = player.getLocation().getBlock();
-        if (playerBlock.getType()== Material.WATER || playerBlock.getType()==Material.BUBBLE_COLUMN
-                || playerBlock.getType()==Material.KELP || playerBlock.getType()==Material.KELP_PLANT
-                || playerBlock.getType()==Material.SEAGRASS || playerBlock.getType()==Material.TALL_SEAGRASS
-                || (playerBlock.getBlockData() instanceof Waterlogged && ((Waterlogged) playerBlock.getBlockData()).isWaterlogged())){
-            return;
+        if (!Utils.canCrawl(event.getPlayer())){
+            return; //Because canCrawl is not work in CrPlayer Class.
         }
         Bukkit.getScheduler().runTaskAsynchronously(crawling, () -> {
-
+            Player player = event.getPlayer();
             CrPlayer crPlayer = crawling.getPlayerCrawling(player);
 
-            if(event.isSneaking()) {
+            if (event.isSneaking()) {
 
                 // Stop Crawling
-                if(crPlayer != null && crPlayer.toggleMode() != null && crPlayer.toggleMode() && this.config.getStringList("crawling_modes").contains("TOGGLE")) {
+                if (crPlayer != null && crPlayer.toggleMode() != null && crPlayer.toggleMode() && this.config.getStringList("crawling_modes").contains("TOGGLE")) {
                     Bukkit.getScheduler().runTask(crawling, crPlayer::stopCrawling);
                     return;
                 }
 
                 // Start crawling when sneaking while in a tunnel if HOLD mode is enabled
-                if(crPlayer == null && player.isSwimming() && this.config.getStringList("crawling_modes").contains("HOLD") && !player.getLocation().getBlock().isLiquid()) {
+                if (crPlayer == null && player.isSwimming() && this.config.getStringList("crawling_modes").contains("HOLD") && !player.getLocation().getBlock().isLiquid()) {
                     Bukkit.getScheduler().runTask(crawling, () -> crawling.startCrawling(player));
                     return;
                 }
 
                 // Tunnels
                 if (this.config.getStringList("crawling_modes").contains("TUNNELS")) {
-                    if(Utils.isInFrontOfATunnel(player)) {
+                    if (Utils.isInFrontOfATunnel(player)) {
 
                         Bukkit.getScheduler().runTask(crawling, () -> crawling.startCrawling(player));
 
@@ -75,7 +57,7 @@ public class SneakingListener implements Listener {
 
                         Bukkit.getScheduler().runTaskLater(this.crawling, () -> {
                             CrPlayer crPlayer1 = crawling.getPlayerCrawling(player);
-                            if(crPlayer1 != null) {
+                            if (crPlayer1 != null) {
                                 crPlayer1.stopCrawling();
                             }
                         }, 10);
@@ -83,7 +65,7 @@ public class SneakingListener implements Listener {
                     }
                 }
 
-                if(player.getLocation().getPitch() > 87) { // The player is looking downwards and is not crawling
+                if (player.getLocation().getPitch() > 87) { // The player is looking downwards and is not crawling
                     // Double Sneaking
                     if (this.config.getStringList("start_crawling").contains("DOUBLE_SHIFT") || this.config.getStringList("start_crawling").contains("DOWN_DOUBLE_SHIFT")) { //if double sneaking is enabled
                         if (!doubleSneakingCheck.contains(player)) {
@@ -97,12 +79,12 @@ public class SneakingListener implements Listener {
                     }
 
                     // Hold
-                    for(String start_crawling : this.config.getStringList("start_crawling")) {
-                        if(start_crawling.contains("HOLD")) {
+                    for (String start_crawling : this.config.getStringList("start_crawling")) {
+                        if (start_crawling.contains("HOLD")) {
                             this.holdCheck.remove(player);
                             int time = Integer.parseInt(start_crawling.split("_")[1]);
                             this.holdCheck.put(player, Bukkit.getScheduler().runTaskLater(this.crawling, () -> {
-                                if(player.isSneaking() && player.getLocation().getPitch() > 87) {
+                                if (player.isSneaking() && player.getLocation().getPitch() > 87) {
                                     crawling.startCrawling(player);
                                     this.holdCheck.remove(player);
                                 }
@@ -112,11 +94,10 @@ public class SneakingListener implements Listener {
                     }
                 }
 
-            }
-            else { // If the player is not sneaking
+            } else { // If the player is not sneaking
 
                 // Stop Crawling
-                if(crPlayer != null && crPlayer.toggleMode() != null && !crPlayer.toggleMode() && this.config.getStringList("crawling_modes").contains("HOLD")) {
+                if (crPlayer != null && crPlayer.toggleMode() != null && !crPlayer.toggleMode() && this.config.getStringList("crawling_modes").contains("HOLD")) {
                     Bukkit.getScheduler().runTask(crawling, crPlayer::stopCrawling);
                 }
             }

@@ -1,14 +1,5 @@
 package me.arthed.crawling.impl;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.Association;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -19,9 +10,15 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
-
-
 import me.arthed.crawling.Crawling;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 public class WorldGuardImplementation {
     private final Plugin owningPlugin = Crawling.getInstance();
@@ -44,7 +41,7 @@ public class WorldGuardImplementation {
 
     public WorldGuardImplementation(Plugin plugin, Plugin owningPlugin) {
         if (plugin instanceof WorldGuardPlugin) {
-            worldGuardPlugin = (WorldGuardPlugin)plugin;
+            worldGuardPlugin = (WorldGuardPlugin) plugin;
 
             try {
                 Class<?> worldGuardClass = Class.forName("com.sk89q.worldguard.WorldGuard");
@@ -83,7 +80,7 @@ public class WorldGuardImplementation {
         FlagRegistry registry = null;
         try {
             Method getFlagRegistryMethod = worldGuard.getClass().getMethod("getFlagRegistry");
-            registry = (FlagRegistry)getFlagRegistryMethod.invoke(worldGuard);
+            registry = (FlagRegistry) getFlagRegistryMethod.invoke(worldGuard);
             try {
                 StateFlag flag = new StateFlag("crawling", true);
                 registry.register(flag);
@@ -161,9 +158,9 @@ public class WorldGuardImplementation {
         try {
             if (worldAdaptMethod != null) {
                 Object worldEditWorld = worldAdaptMethod.invoke(null, world);
-                regionManager = (RegionManager)regionContainerGetMethod.invoke(regionContainer, worldEditWorld);
+                regionManager = (RegionManager) regionContainerGetMethod.invoke(regionContainer, worldEditWorld);
             } else {
-                regionManager = (RegionManager)regionContainerGetMethod.invoke(regionContainer, world);
+                regionManager = (RegionManager) regionContainerGetMethod.invoke(regionContainer, world);
             }
         } catch (Exception ex) {
             owningPlugin.getLogger().log(Level.WARNING, "An error occurred looking up a WorldGuard RegionManager", ex);
@@ -181,7 +178,7 @@ public class WorldGuardImplementation {
             Object vector = vectorConstructorAsAMethodBecauseWhyNot == null
                     ? vectorConstructor.newInstance(location.getX(), location.getY(), location.getZ())
                     : vectorConstructorAsAMethodBecauseWhyNot.invoke(null, location.getX(), location.getY(), location.getZ());
-            return (ApplicableRegionSet)regionManagerGetMethod.invoke(regionManager, vector);
+            return (ApplicableRegionSet) regionManagerGetMethod.invoke(regionManager, vector);
         } catch (Exception ex) {
             owningPlugin.getLogger().log(Level.WARNING, "An error occurred looking up a WorldGuard ApplicableRegionSet", ex);
         }

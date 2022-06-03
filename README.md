@@ -83,9 +83,6 @@ ignore_updates: false
   ```
 </details>
 
-![](https://i.imgur.com/Pwsgenu.png)
-# Compile
-Using ShadowJar (Gradle Java 16)
 
 ![](https://i.imgur.com/Pwsgenu.png)
 # Statistics
@@ -93,6 +90,21 @@ Using ShadowJar (Gradle Java 16)
 <details>
   <summary><b>statistics</b></summary>
   <img src="https://bstats.org/signatures/bukkit/Crawling.svg">
+</details>
+
+![](https://i.imgur.com/Pwsgenu.png)
+# Contributors
+<details>
+  <summary><b>Styro457</b></summary>
+  Main Developer
+</details>
+<details>
+  <summary><b>IPECTER</b></summary>
+  Fix Bugs, Maintaining / PR
+</details>
+<details>
+  <summary><b>Epicnicity322</b></summary>
+  Rework NMS Code to Version Independent NMS / PR
 </details>
 
 ![](https://i.imgur.com/Pwsgenu.png)

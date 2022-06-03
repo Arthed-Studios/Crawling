@@ -18,13 +18,14 @@ import java.net.URLConnection;
 public class UpdateManager implements Listener {
 
     public boolean update;
-    private final String currentVersion;
+    private final Version currentVersion;
 
 
     public UpdateManager(JavaPlugin plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
-        this.currentVersion = plugin.getDescription().getVersion();
+        //Make sure plugin description version is always a valid version (i.e: 1.0, 4.1.2 etc), or errors will be thrown.
+        this.currentVersion = new Version(plugin.getDescription().getVersion());
     }
 
     public void checkUpdates() {
@@ -32,40 +33,28 @@ public class UpdateManager implements Listener {
             URL url = null;
             try {
                 url = new URL("https://api.spigotmc.org/legacy/update.php?resource=69126");
-            } catch (MalformedURLException ignored) {
-            }
+            } catch (MalformedURLException ignored) {}
             URLConnection conn = null;
             try {
                 assert url != null;
                 conn = url.openConnection();
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
             try {
                 assert conn != null;
                 BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                if (br.readLine().equals(currentVersion)) {
-                    update = Boolean.FALSE;
-                } else {
+                //Checking if version is newer than the current.
+                if (new Version(br.readLine()).compareTo(currentVersion) > 0) {
                     update = Boolean.TRUE;
-                    if (currentVersion.contains("SNAPSHOT")) {
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (p.isOp()) {
-                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
-                            }
-                        }
-                    } else {
-                        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
-                        for (Player p : Bukkit.getOnlinePlayers()) {
-                            if (p.isOp()) {
-                                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
-                            }
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
+                    for(Player p : Bukkit.getOnlinePlayers()) {
+                        if(p.isOp()) {
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
                         }
                     }
-
+                } else {
+                    update = Boolean.FALSE;
                 }
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) {}
         });
 
         thread.start();
@@ -75,13 +64,8 @@ public class UpdateManager implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        if (p.isOp() && update) {
-            if (currentVersion.contains("SNAPSHOT")) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThis is snapshot version! Check out the updates often: https://www.spigotmc.org/resources/69126/"));
-            } else {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
-
-            }
+        if(p.isOp() && update) {
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[Crawling] &aThere is an update availabe! Download it from: https://www.spigotmc.org/resources/69126/"));
         }
     }
 

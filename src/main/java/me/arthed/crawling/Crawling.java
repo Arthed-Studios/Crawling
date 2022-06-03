@@ -1,22 +1,19 @@
 package me.arthed.crawling;
 
-import com.sun.tools.javac.Main;
 import me.arthed.crawling.commands.CrawlingCommand;
+import me.arthed.crawling.config.CrawlingConfig;
 import me.arthed.crawling.impl.WorldGuardImplementation;
 import me.arthed.crawling.listeners.PlayerDeathListener;
 import me.arthed.crawling.listeners.PlayerInteractListener;
 import me.arthed.crawling.listeners.SneakingListener;
 import me.arthed.crawling.listeners.SwimmingToggleListener;
-import me.arthed.crawling.nms.v1_15.NmsPackets_v1_15;
-import me.arthed.crawling.nms.v1_16.NmsPackets_v1_16;
-import me.arthed.crawling.nms.v1_17.NmsPackets_v1_17;
-import me.arthed.crawling.nms.v1_18.NmsPackets_v1_18;
-import me.arthed.crawling.nms.v1_18_2.NmsPackets_v1_18_2;
+import me.arthed.crawling.nms.LegacyIndependentNmsPackets;
+import me.arthed.crawling.nms.VersionIndependentNmsPackets;
 import me.arthed.crawling.utils.BlockUtils;
 import me.arthed.crawling.utils.MetricsLite;
 import me.arthed.crawling.utils.UpdateManager;
+import me.arthed.crawling.utils.Version;
 import me.arthed.nms.NmsPackets;
-import me.arthed.nms.v1_14.NmsPackets_v1_14;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
@@ -25,14 +22,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.arthed.crawling.config.CrawlingConfig;
-
 import java.util.HashMap;
 import java.util.Objects;
 
 public class Crawling extends JavaPlugin implements Listener {
 
     private static Crawling plugin;
+
     public static Crawling getInstance() {
         return plugin;
     }
@@ -40,41 +36,57 @@ public class Crawling extends JavaPlugin implements Listener {
     private final HashMap<Player, CrPlayer> playersCrawling = new HashMap<>();
 
     private NmsPackets nmsPacketManager;
+
     public NmsPackets getNmsPacketManager() {
         return nmsPacketManager;
     }
 
     private WorldGuardImplementation worldGuard;
+
     public WorldGuardImplementation getWorldGuard() {
         return this.worldGuard;
     }
 
     private CrawlingConfig config;
+
     public CrawlingConfig getConfig() {
         return this.config;
     }
 
+    private final static Version bukkitVersion = new Version(Bukkit.getBukkitVersion().substring(0, Bukkit.getBukkitVersion().indexOf("-")));
+    private final static Version maxSupportedVersion = new Version("1.18.2");
+    private final static Version minSupportedVersion = new Version("1.14");
+
+    private static boolean isLegacy() {
+        try {
+            // The minecraft server version was removed from the package name on newer versions.
+            Class.forName("net.minecraft.server.MinecraftServer");
+            return false;
+        } catch (ClassNotFoundException e) {
+            // Class was not found, therefore packages still have different names on each version.
+            return true;
+        }
+    }
+
     @Override
     public void onEnable() {
-        //Check if version is compatible and set the proper nms packet manager
-        if(Bukkit.getVersion().contains("1.14"))
-            this.nmsPacketManager = new NmsPackets_v1_14();
-        else if(Bukkit.getVersion().contains("1.15"))
-            this.nmsPacketManager = new NmsPackets_v1_15();
-        else if(Bukkit.getVersion().contains("1.16"))
-            this.nmsPacketManager = new NmsPackets_v1_16();
-        else if(Bukkit.getVersion().contains("1.17"))
-            this.nmsPacketManager = new NmsPackets_v1_17();
-        else if(Bukkit.getVersion().contains("1.18.2"))
-            this.nmsPacketManager = new NmsPackets_v1_18_2();
-        else if(Bukkit.getVersion().contains("1.18.1"))
-            this.nmsPacketManager = new NmsPackets_v1_18();
-        else if(Bukkit.getVersion().contains("1.18"))
-            this.nmsPacketManager = new NmsPackets_v1_18();
-        else {
+        //Checking if version is lower than 1.14
+        if (bukkitVersion.compareTo(minSupportedVersion) < 0) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cSorry, this plugin works only on 1.14 or higher versions."));
             Bukkit.getPluginManager().disablePlugin(plugin);
             return;
+        }
+
+        //Checking which NmsPacketManager should be used.
+        if (isLegacy()) {
+            nmsPacketManager = new LegacyIndependentNmsPackets(Bukkit.getWorlds().get(0));
+        } else {
+            nmsPacketManager = new VersionIndependentNmsPackets(Bukkit.getWorlds().get(0));
+
+            //Checking if current version was not tested yet
+            if (bukkitVersion.compareTo(maxSupportedVersion) > 0) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&cThe plugin was not made for this version, proceed with caution."));
+            }
         }
 
         //bstats
@@ -93,21 +105,21 @@ public class Crawling extends JavaPlugin implements Listener {
 
         saveDefaultConfig();
 
-        if(!config.getBoolean("ignore_updates"))
+        if (!config.getBoolean("ignore_updates"))
             new UpdateManager(this).checkUpdates();
     }
 
     @Override
     public void onLoad() {
         Plugin worldGuardPlugin = getServer().getPluginManager().getPlugin("WorldGuard");
-        if(worldGuardPlugin != null) {
+        if (worldGuardPlugin != null) {
             worldGuard = new WorldGuardImplementation(worldGuardPlugin, this);
         }
     }
 
     @Override
     public void onDisable() {
-        for(Player playerCrawling : this.playersCrawling.keySet()) {
+        for (Player playerCrawling : this.playersCrawling.keySet()) {
             Block blockAbovePlayer = playerCrawling.getLocation().add(0, 1.5, 0).getBlock();
             playerCrawling.sendBlockChange(blockAbovePlayer.getLocation(), blockAbovePlayer.getBlockData());
             blockAbovePlayer.getState().update();
@@ -115,7 +127,7 @@ public class Crawling extends JavaPlugin implements Listener {
     }
 
     public void startCrawling(Player player) {
-        if(!this.playersCrawling.containsKey(player)) {
+        if (!this.playersCrawling.containsKey(player)) {
             this.playersCrawling.put(player, new CrPlayer(player));
         }
     }
@@ -131,7 +143,6 @@ public class Crawling extends JavaPlugin implements Listener {
     public CrPlayer getPlayerCrawling(Player player) {
         return this.playersCrawling.get(player);
     }
-
 
 
 }
